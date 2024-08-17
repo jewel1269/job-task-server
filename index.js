@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-// MongoDB setup
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://jewel1269:ZMrIfyj7hV7DaN7h@cluster0.ueeqib1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
