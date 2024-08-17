@@ -10,7 +10,7 @@ app.use(cors());
 
 // MongoDB setup
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://jewel1269:ZMrIfyj7hV7DaN7h@cluster0.ueeqib1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://jewel1269:ZMrIfyj7hV7DaN7h@cluster0.ueeqib1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -46,7 +46,7 @@ async function run() {
          try {
            const {
              page = 1,
-             limit = 10,
+             limit = 12,
              search = "",
              brand,
              category,
@@ -105,6 +105,8 @@ async function run() {
              totalPages: Math.ceil(totalProducts / limit),
              currentPage: parseInt(page),
            });
+
+           
          } catch (error) {
            console.error("Error fetching products:", error); 
            res.status(500).send({ message: "Error fetching products", error });
@@ -127,3 +129,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
+
