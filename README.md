@@ -1,6 +1,6 @@
 ## Product Search and Filtering Website (Backend)
 
-#### Website: Best Outfit (https://best-outfit-client.vercel.app)
+#### Website: Tech Shop (https://job-task-d6aa7.web.app/)
 
 ### Project Overview
 
@@ -23,7 +23,7 @@ This is the backend part of the Fullstack Product Search and Filtering Website. 
 
 1. Clone the repository:
    ```bash
-   git clone <https://github.com/git-zahidul-islam/best-outfit-server>
+   git clone <https://github.com/jewel1269/job-task-server.git>
    cd <backend-directory>
 2. Install dependencies: npm install
 3. Create a .env file in the root directory and add your environment variables
