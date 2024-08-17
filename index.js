@@ -42,70 +42,75 @@ async function run() {
             }
         });
 
-        app.get('/products', async (req, res) => {
-            try {
-                const {
-                    page = 1,
-                    limit = 10,
-                    search = "",
-                    brand,
-                    category,
-                    minPrice,
-                    maxPrice,
-                    sortBy,
-                    sortOrder = "asc",
-                } = req.query;
+       app.get("/products", async (req, res) => {
+         try {
+           const {
+             page = 1,
+             limit = 10,
+             search = "",
+             brand,
+             category,
+             minPrice,
+             maxPrice,
+             sortBy,
+             sortOrder = "asc",
+           } = req.query;
 
-                // Build the query object for filtering
-                let query = {};
+           // Build the query object for filtering
+           let query = {};
 
-                if (search) {
-                    query.productName = { $regex: search, $options: "i" };
-                }
-                if (brand) {
-                    query.brandName = brand;
-                }
-                if (category) {
-                    query.category = category;
-                }
-                if (minPrice && maxPrice) {
-                    query.price = {
-                        $gte: parseFloat(minPrice),
-                        $lte: parseFloat(maxPrice),
-                    };
-                }
+           if (search) {
+             query.productName = { $regex: search, $options: "i" };
+           }
+           if (brand) {
+             query.brandName = brand;
+           }
+           if (category) {
+             query.category = category;
+           }
+           if (minPrice && maxPrice) {
+             query.price = {
+               $gte: parseFloat(minPrice),
+               $lte: parseFloat(maxPrice),
+             };
+           } else if (minPrice) {
+             query.price = { $gte: parseFloat(minPrice) };
+           } else if (maxPrice) {
+             query.price = { $lte: parseFloat(maxPrice) };
+           }
 
-                // Sorting options
-                let sortOptions = {};
-                if (sortBy) {
-                    sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
-                } else {
-                    sortOptions["creationDate"] = -1;
-                }
+           // Sorting options
+           let sortOptions = {};
+           if (sortBy) {
+             sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+           } else {
+             sortOptions["creationDate"] = -1;
+           }
 
-                // Pagination options
-                const skip = (page - 1) * limit;
+          
+           const skip = (page - 1) * limit;
 
-                const products = await productCollection
-                    .find(query)
-                    .sort(sortOptions)
-                    .skip(skip)
-                    .limit(parseInt(limit))
-                    .toArray();
-                    console.log(products)
+           const products = await productCollection
+             .find(query)
+             .sort(sortOptions)
+             .skip(skip)
+             .limit(parseInt(limit))
+             .toArray();
 
-                const totalProducts = await productCollection.countDocuments(query);
+           const totalProducts = await productCollection.countDocuments(query);
 
-                res.send({
-                    products,
-                    totalProducts,
-                    totalPages: Math.ceil(totalProducts / limit),
-                    currentPage: parseInt(page),
-                });
-            } catch (error) {
-                res.status(500).send({ message: "Error fetching products", error });
-            }
-        });
+           res.send({
+             products,
+             totalProducts,
+             totalPages: Math.ceil(totalProducts / limit),
+             currentPage: parseInt(page),
+           });
+         } catch (error) {
+           console.error("Error fetching products:", error); 
+           res.status(500).send({ message: "Error fetching products", error });
+         }
+       });
+
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
